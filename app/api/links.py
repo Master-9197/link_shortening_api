@@ -18,7 +18,10 @@ async def add_user(user_data: Annotated[UserCreate, Depends()]) -> AddUserRespon
     try:
         user_id = await AuthService.add_user(user_data)
     except IntegrityError:
-        raise HTTPException(status.HTTP_409_CONFLICT, detail="This login is already in use")
+        raise HTTPException(
+            status=status.HTTP_409_CONFLICT,
+            detail="This login is already in use"
+        )
     return {"ok": True, "user_id": user_id}
 
 
@@ -28,7 +31,7 @@ async def verify(
     try:
         result = await AuthService.verify_user(user_data)
 
-        return {"access_token": result}
+        return {"access_token": result, "type": "access"}
 
     except Exception as e:
         print(f"ERROR verify - {e}")
