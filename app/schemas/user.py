@@ -17,8 +17,11 @@ class User(UserBase):
     id: Optional[str] = None
     
 class AddUserResponce(BaseModel):
-    ok: bool = True
     user_id: int
+
+class SuccessLoginResponce(BaseModel):
+    access_token: str
+    token_type: str
 
 
     

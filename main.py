@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from app.api.links import router as links_router
+from app.api.authorization import router as links_router
 from app.db.database import create_tables, delete_tables
 
 

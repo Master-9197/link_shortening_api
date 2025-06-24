@@ -19,13 +19,16 @@ config.JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
 config.JWT_TOKEN_LOCATION = ["cookies"]
 auth = AuthX(config=config)
 
+AuthRequired = auth.access_token_required
 
 
 class AuthService:
     @classmethod
     async def add_user(cls, user_data: UserCreate):
         async with new_session() as session:
+            
             user_info = user_data.model_dump()
+
             hashed_password = pass_mngr.hash(user_data.password)
             user_info["hashed_password"] = hashed_password
             user_info.pop("password")
