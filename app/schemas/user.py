@@ -20,8 +20,7 @@ class AddUserResponce(BaseModel):
     user_id: int
 
 class LoginResponce(BaseModel):
-    access_token: str
-    token_type: str
+    message: str = "Login successful"
 
 
     

@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 
 from ..schemas.user import AddUserResponce, LoginResponce, UserBase, UserCreate
-from ..services.auth import AuthRequired, AuthService
+from ..services.auth import AuthRequired, AuthService, config
 
 
 
@@ -15,7 +15,7 @@ router = APIRouter(
 )
 
 
-@router.post("/register/", status_code=status.HTTP_201_CREATED)
+@router.post("/register", status_code=status.HTTP_201_CREATED)
 async def add_user(user_data: Annotated[UserCreate, Depends()]) -> AddUserResponce:
     try: 
         user_id = await AuthService.add_user(user_data)
@@ -27,12 +27,9 @@ async def add_user(user_data: Annotated[UserCreate, Depends()]) -> AddUserRespon
     
 
 
-@router.get("/login/", status_code=status.HTTP_200_OK)
+@router.get("/login", status_code=status.HTTP_200_OK)
 async def verify(
-    user_data: Annotated[UserBase ,Depends()], responce: Response) -> LoginResponce:
+    user_data: Annotated[UserBase, Depends()],response: Response) -> LoginResponce:
     token = await AuthService.verify_user(user_data)
-    responce.set_cookie("access_token_cookie", token)
-    data = {
-        "access_token": token,
-    }
-    return JSONResponse(content=data, status_code=200)
+    response.set_cookie(config.JWT_ACCESS_COOKIE_NAME, value=token)
+    return {"message": "Login successful"}

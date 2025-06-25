@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase, relationship
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, String
+from pydantic import AnyUrl
 
 
 class Base(DeclarativeBase):
@@ -12,11 +13,12 @@ class Links(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     uid: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     url: Mapped[str]
-    code: Mapped[str] = mapped_column(unique=True)
+    hash: Mapped[str] = mapped_column(unique=True)
     
     #Relationships:
     user: Mapped["Users"] = relationship(back_populates="links", cascade="all, delete")
     
+
 class Users(Base):
     __tablename__ = "users"
     

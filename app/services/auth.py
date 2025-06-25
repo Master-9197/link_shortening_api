@@ -18,7 +18,8 @@ pass_mngr = CryptContext(schemes=["sha256_crypt", "md5_crypt", "des_crypt"])
 
 config = AuthXConfig()
 config.JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
-config.JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=30)
+config.JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=60)
+config.JWT_ACCESS_COOKIE_NAME = "access_token_cookie"
 config.JWT_TOKEN_LOCATION = ["cookies"]
 auth = AuthX(config=config)
 
@@ -62,6 +63,7 @@ class AuthService:
         
     @classmethod
     async def verify_user(cls, user_data: UserBase) -> str:
+        """Возвращает JWT токен"""
         async with new_session() as session:
             # Формируем ключи Redis один раз
             password_key = f"user:{user_data.login}:hashed_password"
