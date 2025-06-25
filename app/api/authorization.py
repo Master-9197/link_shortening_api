@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 
 from ..schemas.user import AddUserResponce, LoginResponce, UserBase, UserCreate
-from ..services.auth import AuthRequired, AuthService, config
+from ..services.auth import AuthService, config
 
 
 
@@ -23,7 +23,10 @@ async def add_user(user_data: Annotated[UserCreate, Depends()]) -> AddUserRespon
     except IntegrityError:
     # Ошибка, которую отправляет база данных, о том, что это значение
     # не уникально, т.е. логин должен быть в базе один
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT ,detail="This login is already in use")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="This login is already in use"
+        )
     
 
 
