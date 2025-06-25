@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from ..models.tables import Base
-from ..db.config import settings, redis_sessings
+from ..db.config import settings
 import redis.asyncio as redis
 import logging
 
@@ -14,10 +14,8 @@ new_session = async_sessionmaker(
     expire_on_commit=False,
     class_=AsyncSession)
     
-redis_client = redis.Redis(
-    host=redis_sessings.REDIS_HOST,
-    port=redis_sessings.REDIS_PORT,
-    db=0,
+redis_client = redis.Redis.from_url(
+    url=settings.redis_url,
     decode_responses=True
 )
 

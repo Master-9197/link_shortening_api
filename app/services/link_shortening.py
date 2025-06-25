@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqids import Sqids
 
 from ..models.tables import *
@@ -50,7 +51,10 @@ class LinkShorteningService:
                     select(Links.url)
                     .filter_by(hash=hash)
                 )
-                url = result.scalar()
+                if not url:
+                    raise HTTPException(status_code=404, detail="This short url not found")
+                else:
+                    url = result.scalar()
                 
         return url
             

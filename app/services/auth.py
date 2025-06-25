@@ -81,7 +81,6 @@ class AuthService:
                     )
                 # Конвертируем user_id из строки (Redis хранит все как строки)
                 user_id = int(cache_user_id)
-                    
                 # Создаем токен
                 return auth.create_access_token(uid=str(user_id))
 
