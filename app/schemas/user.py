@@ -19,7 +19,7 @@ class User(UserBase):
 class AddUserResponce(BaseModel):
     user_id: int
 
-class SuccessLoginResponce(BaseModel):
+class LoginResponce(BaseModel):
     access_token: str
     token_type: str
 

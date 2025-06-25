@@ -1,33 +1,26 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+import logging
 
 from app.api.authorization import router as links_router
-from app.db.database import create_tables, delete_tables
+from app.db.database import create_tables, delete_tables, run_redis
+
+
+format_logging = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format=format_logging)
+
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await delete_tables()
     await create_tables()
-    print("Database reloaded!")
+    await run_redis()
+    logger.info("Database reloaded!")
     yield
-    print("Shutting down")
+    logger.info("Shutting down")
     
     
 app = FastAPI(lifespan=lifespan, title="Link Shortening API")
 app.include_router(links_router)
-
-
-# async def main():
-#     config = uvicorn.Config(
-#         app="main:app",
-#         log_level="info",
-#         reload=True
-#     )
-    
-#     server = uvicorn.Server(config)
-#     await server.serve()
-    
-    
-# if __name__ == "__main__":
-#     asyncio.run(main())

@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError
 
 
-from ..schemas.user import AddUserResponce, SuccessLoginResponce, UserBase, UserCreate
+from ..schemas.user import AddUserResponce, LoginResponce, UserBase, UserCreate
 from ..services.auth import AuthRequired, AuthService
 
 
@@ -29,16 +29,10 @@ async def add_user(user_data: Annotated[UserCreate, Depends()]) -> AddUserRespon
 
 @router.get("/login/", status_code=status.HTTP_200_OK)
 async def verify(
-    user_data: Annotated[UserBase ,Depends()], responce: Response) -> SuccessLoginResponce:
-    try:
-        token = await AuthService.verify_user(user_data)
-        responce.set_cookie("access_token_cookie", token)
-        data = {
-            "access_token": token,
-            "token_type": "bearer"
-        }
-        return JSONResponse(content=data, status_code=200)
-
-    except Exception as e:
-        print(f"ERROR verify - {e}")
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED)
+    user_data: Annotated[UserBase ,Depends()], responce: Response) -> LoginResponce:
+    token = await AuthService.verify_user(user_data)
+    responce.set_cookie("access_token_cookie", token)
+    data = {
+        "access_token": token,
+    }
+    return JSONResponse(content=data, status_code=200)

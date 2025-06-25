@@ -7,12 +7,19 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_USER: str
     DB_PASS: str
-    REDIS_URL: str
+
     
     @property
     def db_url(self) -> str:
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
-    model_config = SettingsConfigDict(env_file=r"secrets\db.env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
     
 settings = Settings()
+
+class Redis_settings(Settings):
+    REDIS_HOST: str
+    REDIS_PORT: str
+
+
+redis_sessings = Redis_settings()
