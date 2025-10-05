@@ -20,7 +20,7 @@
 
 1. Клонируйте репозиторий:
 ```bash
-git clone https://github.com/Master-9197/link_sortening_api.git
+git clone https://github.com/Master-9197/link_shortening_api.git
 ```
 2.Установка зависимостей
 
